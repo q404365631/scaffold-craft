@@ -101,6 +101,8 @@ def main(argv=None) -> None:
                        help="Preview without creating files")
         p.add_argument("--quiet", "-q", action="store_true",
                        help="Suppress progress output")
+        p.add_argument("--var", metavar="KEY=VALUE", action="append", default=[],
+                       help="Template variable (repeatable, e.g. --var project_name=my-api)")
 
     # tree subcommand
     tree_p = sub.add_parser("tree", help="Scaffold from a tree-style text string")
@@ -168,6 +170,19 @@ def main(argv=None) -> None:
     if not nodes:
         print("Warning: no nodes parsed from input.", file=sys.stderr)
         sys.exit(0)
+
+    # Apply template variables
+    if args.var:
+        from scaffoldcraft.variables import apply_variables
+        variables = {}
+        for var_spec in args.var:
+            if "=" not in var_spec:
+                print(f"Error: --var must be KEY=VALUE, got: {var_spec}", file=sys.stderr)
+                sys.exit(1)
+            key, value = var_spec.split("=", 1)
+            variables[key] = value
+        for node in nodes:
+            apply_variables(node, variables)
 
     result = scaffold(
         nodes,
