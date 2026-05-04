@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scaffold-craft"
+version = "1.0.0"
+description = "Scaffold any project structure from a tree string, JSON spec, YAML spec, or image screenshot"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Jishanahmed AR Shaikh", email = "jishanahmedshaikh@gmail.com" }]
+keywords = ["scaffold", "project", "structure", "generator", "cli", "template", "boilerplate"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Code Generators",
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+# Phase 2: image input via Ollama vision or OpenAI
+vision  = []
+# Phase 3: YAML spec support
+yaml    = ["pyyaml>=6.0"]
+dev     = ["pytest>=7.0"]
+
+[project.scripts]
+scaffold = "scaffoldcraft.cli:main"
+
+[project.urls]
+Homepage  = "https://github.com/jishanahmed-shaikh/scaffold-craft"
+Issues    = "https://github.com/jishanahmed-shaikh/scaffold-craft/issues"
+Changelog = "https://github.com/jishanahmed-shaikh/scaffold-craft/blob/master/CHANGELOG.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts   = "-v --tb=short"
