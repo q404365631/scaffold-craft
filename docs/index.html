@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>scaffold-craft — Turn any project structure into real files instantly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0a0a0f;--surface:#111118;--surface2:#1a1a24;--border:#2a2a3a;--text:#f0f0f8;--muted:#8888aa;--accent:#6366f1;--green:#4ade80;--mono:'JetBrains Mono',monospace;--radius:10px}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    nav{border-bottom:1px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(10,10,15,.9);backdrop-filter:blur(12px);z-index:10}
+    .nav-brand{font-family:var(--mono);font-size:.9rem;color:var(--accent);font-weight:600}
+    .nav-links a{color:var(--muted);text-decoration:none;margin-left:1.5rem;font-size:.82rem}.nav-links a:hover{color:var(--text)}
+    .nav-cta{margin-left:1.5rem;padding:.35rem .9rem;background:var(--accent);color:#fff;border-radius:6px;font-size:.8rem;font-weight:500;text-decoration:none}.nav-cta:hover{opacity:.85}
+    .hero{max-width:860px;margin:0 auto;padding:5rem 2rem 3rem;text-align:center}
+    .hero-tag{display:inline-block;padding:.25rem .75rem;background:rgba(99,102,241,.12);color:var(--accent);border-radius:999px;font-size:.72rem;font-weight:500;margin-bottom:1.5rem;border:1px solid rgba(99,102,241,.3)}
+    .hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.03em;margin-bottom:1rem;line-height:1.1}
+    .hero h1 em{font-style:normal;color:var(--accent)}
+    .hero p{color:var(--muted);font-size:1rem;max-width:520px;margin:0 auto 2rem;font-weight:300}
+    .hero-actions{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+    .btn{padding:.6rem 1.25rem;border-radius:8px;font-size:.875rem;font-weight:500;text-decoration:none;transition:all .15s;display:inline-block}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{opacity:.85}
+    .btn-ghost{border:1px solid var(--border);color:var(--text)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+    .install-box{max-width:460px;margin:0 auto 4rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+    .install-top{padding:.4rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border);font-size:.7rem;color:var(--muted);font-family:var(--mono);display:flex;justify-content:space-between}
+    .copy-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.7rem;padding:.15rem .5rem;border-radius:4px;font-family:'Inter',sans-serif}.copy-btn:hover{background:var(--border)}
+    .install-cmd{padding:.9rem 1rem;font-family:var(--mono);font-size:.85rem}
+    .install-cmd .dollar{color:var(--accent)}
+    .section{max-width:960px;margin:0 auto;padding:0 2rem 5rem}
+    .section-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:.6rem;font-family:var(--mono)}
+    .section h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem}
+    .section-sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem;font-weight:300}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    @media(max-width:640px){.split{grid-template-columns:1fr}}
+    .terminal{background:#060610;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+    .term-bar{background:var(--surface2);padding:.5rem 1rem;display:flex;gap:.4rem;align-items:center;border-bottom:1px solid var(--border);justify-content:space-between}
+    .term-label{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+    .dots{display:flex;gap:.4rem}
+    .tdot{width:10px;height:10px;border-radius:50%}
+    .term-body{padding:1.25rem 1.5rem;font-family:var(--mono);font-size:.75rem;line-height:2;color:#8888aa;white-space:pre}
+    .tg{color:#4ade80}.tp{color:#818cf8}.td{color:#475569}.ty{color:#fbbf24}
+    .formats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
+    .fmt-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.25rem;transition:border-color .2s}.fmt-card:hover{border-color:var(--accent)}
+    .fmt-name{font-family:var(--mono);font-size:.8rem;color:var(--accent);margin-bottom:.35rem;font-weight:500}
+    .fmt-desc{font-size:.78rem;color:var(--muted)}
+    .roadmap{margin-top:1.5rem}
+    .roadmap-item{display:flex;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border)}
+    .roadmap-item:last-child{border-bottom:none}
+    .roadmap-ver{font-family:var(--mono);font-size:.75rem;color:var(--accent);min-width:3.5rem;padding-top:.1rem}
+    .roadmap-title{font-size:.88rem;font-weight:500;margin-bottom:.2rem}
+    .roadmap-desc{font-size:.78rem;color:var(--muted)}
+    .badge-done{display:inline-block;padding:.1rem .4rem;background:rgba(74,222,128,.12);color:var(--green);border-radius:4px;font-size:.65rem;font-family:var(--mono);margin-left:.5rem;border:1px solid rgba(74,222,128,.25)}
+    .divider{border:none;border-top:1px solid var(--border);margin:0}
+    footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:.78rem;color:var(--muted)}
+    footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
+    .footer-links{display:flex;gap:1.5rem;justify-content:center;margin-top:.75rem;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="nav-brand">scaffold-craft</span>
+    <div class="nav-links">
+      <a href="#demo">Demo</a>
+      <a href="#formats">Formats</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="https://github.com/jishanahmed-shaikh/scaffold-craft" target="_blank">GitHub</a>
+      <a class="nav-cta" href="https://github.com/jishanahmed-shaikh/scaffold-craft" target="_blank">Star on GitHub</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-tag">Developer Tool</div>
+    <h1>Turn any project structure<br>into real files <em>instantly</em></h1>
+    <p>Paste a tree from a README. Drop a JSON spec. Pipe from stdin. scaffold-craft reads it and builds the project on disk in one command.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://github.com/jishanahmed-shaikh/scaffold-craft" target="_blank">View on GitHub</a>
+      <a class="btn btn-ghost" href="#demo">See demo</a>
+    </div>
+    <div class="install-box">
+      <div class="install-top"><span>terminal</span><button class="copy-btn" onclick="copyInstall()">copy</button></div>
+      <div class="install-cmd"><span class="dollar">$</span> pip install scaffold-craft</div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section" id="demo" style="padding-top:4rem">
+    <div class="section-label">How it works</div>
+    <h2>Input → Files on disk</h2>
+    <p class="section-sub">Copy a tree from any README, save it, and scaffold it. That's it.</p>
+    <div class="split">
+      <div class="terminal">
+        <div class="term-bar"><div class="dots"><div class="tdot" style="background:#f85149"></div><div class="tdot" style="background:#e3b341"></div><div class="tdot" style="background:#3fb950"></div></div><span class="term-label">structure.txt</span></div>
+        <div class="term-body">my-api/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   └── models.py
+├── tests/
+│   └── test_main.py
+└── requirements.txt</div>
+      </div>
+      <div class="terminal">
+        <div class="term-bar"><div class="dots"><div class="tdot" style="background:#f85149"></div><div class="tdot" style="background:#e3b341"></div><div class="tdot" style="background:#3fb950"></div></div><span class="term-label">scaffold tree --input structure.txt</span></div>
+        <div class="term-body">  scaffold-craft [<span class="tg">LIVE</span>]  →  /projects
+
+  <span class="tp">mkdir</span>  my-api/
+  <span class="tp">mkdir</span>  my-api/app/
+  <span class="tg">touch</span>  my-api/app/__init__.py
+  <span class="tg">touch</span>  my-api/app/main.py
+  <span class="tg">touch</span>  my-api/app/models.py
+  <span class="tp">mkdir</span>  my-api/tests/
+  <span class="tg">touch</span>  my-api/tests/test_main.py
+  <span class="tg">touch</span>  my-api/requirements.txt
+
+  <span class="tg">Created: 3 dirs, 5 files</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section" id="formats" style="padding-top:4rem">
+    <div class="section-label">Input formats</div>
+    <h2>Three ways to define a structure</h2>
+    <div class="formats-grid">
+      <div class="fmt-card">
+        <div class="fmt-name">tree string</div>
+        <div class="fmt-desc">The ASCII/Unicode format from README files and the <code style="font-family:var(--mono);font-size:.85em">tree</code> command. Copy and paste directly.</div>
+      </div>
+      <div class="fmt-card">
+        <div class="fmt-name">JSON spec</div>
+        <div class="fmt-desc">Nested JSON object. File values can be <code style="font-family:var(--mono);font-size:.85em">null</code> (empty) or a string (file content).</div>
+      </div>
+      <div class="fmt-card">
+        <div class="fmt-name">YAML spec</div>
+        <div class="fmt-desc">Same structure as JSON in YAML syntax. Requires <code style="font-family:var(--mono);font-size:.85em">pip install "scaffold-craft[yaml]"</code>.</div>
+      </div>
+      <div class="fmt-card" style="border-style:dashed;opacity:.6">
+        <div class="fmt-name">image (v1.1)</div>
+        <div class="fmt-desc">Screenshot of VS Code file explorer. Parsed via Ollama vision or OpenAI vision API.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section class="section" id="roadmap" style="padding-top:4rem">
+    <div class="section-label">Roadmap</div>
+    <h2>What's coming next</h2>
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-ver">v1.0</div>
+        <div><div class="roadmap-title">Tree, JSON, YAML, CLI <span class="badge-done">DONE</span></div><div class="roadmap-desc">Core scaffold engine with dry-run, overwrite, and skip-existing.</div></div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-ver">v1.1</div>
+        <div><div class="roadmap-title">Image input</div><div class="roadmap-desc">Screenshot of VS Code file explorer → scaffold. Powered by Ollama vision (llava) or OpenAI vision API.</div></div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-ver">v1.2</div>
+        <div><div class="roadmap-title">VS Code extension</div><div class="roadmap-desc">Right-click in the explorer → "Scaffold from structure". Or paste a tree into the command palette.</div></div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-ver">v1.3</div>
+        <div><div class="roadmap-title">Template variables</div><div class="roadmap-desc">Use <code style="font-family:var(--mono);font-size:.85em">{{project_name}}</code>, <code style="font-family:var(--mono);font-size:.85em">{{author}}</code>, <code style="font-family:var(--mono);font-size:.85em">{{year}}</code> in file content.</div></div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-ver">v2.0</div>
+        <div><div class="roadmap-title">AI mode</div><div class="roadmap-desc">Describe your project in plain English. AI generates the structure. scaffold-craft builds it.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <footer>
+    <p>Built by <a href="https://github.com/jishanahmed-shaikh" target="_blank">Jishanahmed AR Shaikh</a></p>
+    <div class="footer-links">
+      <a href="https://github.com/jishanahmed-shaikh/scaffold-craft" target="_blank">GitHub</a>
+      <a href="https://github.com/jishanahmed-shaikh/scaffold-craft/issues" target="_blank">Issues</a>
+      <a href="https://github.com/jishanahmed-shaikh/scaffold-craft/blob/master/CHANGELOG.md" target="_blank">Changelog</a>
+      <a href="https://github.com/jishanahmed-shaikh/scaffold-craft/blob/master/CONTRIBUTING.md" target="_blank">Contributing</a>
+    </div>
+    <p style="margin-top:.75rem;font-size:.72rem">MIT License</p>
+  </footer>
+
+  <script>function copyInstall(){navigator.clipboard.writeText('pip install scaffold-craft');var b=document.querySelector('.copy-btn');b.textContent='copied!';setTimeout(()=>b.textContent='copy',2000)}</script>
+</body>
+</html>
